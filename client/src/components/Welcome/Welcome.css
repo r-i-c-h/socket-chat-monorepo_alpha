@@ -1,20 +1,22 @@
-.joinOuterContainer {
+.welcomeOuterContainer {
+  color: #fff;
+  background-color: var(--clr-blackish);
   display: flex;
   justify-content: center;
   text-align: center;
   height: 100vh;
   align-items: center;
-  background-color: #1a1a1d;
 }
 
-.joinInnerContainer {
-  width: 20%;
+.welcomeInnerContainer {
+  width: 40%;
 }
 
-.joinInput {
+.welcomeInput {
   border-radius: 0;
   padding: 15px 20px;
   width: 100%;
+  margin-top: 1rem;
 }
 
 .heading {
@@ -25,7 +27,7 @@
 }
 
 .button {
-  color: #fff !important;
+  color: inherit;
   text-transform: uppercase;
   text-decoration: none;
   background: #2979ff;
@@ -41,11 +43,11 @@
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
-  .joinOuterContainer {
+  .welcomeOuterContainer {
     height: 100%;
   }
 
-  .joinInnerContainer {
+  .welcomeInnerContainer {
     width: 90%;
   }
 }
