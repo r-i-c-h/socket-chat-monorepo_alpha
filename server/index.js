@@ -44,10 +44,10 @@ io.on('connection', (socket) => {
     if (cb) { cb(); }
   });
 
-  socket.on('newChatMsg', (message, cb) => { // relay chat messages (w/server timestamp)
+  socket.on('newChatMsg', (msg, cb) => { // relay chat msgs (w/server timestamp)
     const user = getUser(socket.id);
     if (user) {
-      const newChatMsg = formatChatMsg(user.name, message.text);
+      const newChatMsg = formatChatMsg(user.name, msg.text);
       io.to(user.roomID).emit('newChatMsg', newChatMsg);
     }
     if (cb) { cb(); }
@@ -57,6 +57,7 @@ io.on('connection', (socket) => {
     console.log(`${socket.id} DISCONNECTED FROM SERVER`);
     const removedUser = removeUser(socket.id);
     console.log('removedUser:', removedUser);
+    socket.leave(removedUser.roomID);
     socket.broadcast
       .to(removedUser.roomID)
       .emit('newAdminChatMsg', formatChatMsg('System', `${removedUser.name} has left ${removedUser.room}`))

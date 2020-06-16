@@ -27,7 +27,7 @@ const Chat = ({ location }) => { // location is from react-router-dom
         alert('ERROR: ' + error);
         setRoom('ERROR');
       } else {
-        setIsConnected(true);
+        if (user) { setIsConnected(true); }
       }
     });
 
@@ -40,7 +40,7 @@ const Chat = ({ location }) => { // location is from react-router-dom
 
   useEffect(() => { // INBOUND MESSAGE HANDLING
     // const addNewChatMsg = newMsg => setMessages([...messages, newMsg]);
-    // socket.on('newChatMsg', (msg) => { addNewChatMsg(msg); socket.off(); })
+    // socket.on('newChatMsg', (msg) => { addNewChatMsg(msg); socket.off(); }) // Needed socket.off for embedded sockIO. Still necessary??
     socket.on('newChatMsg', (msg) => { setMessages([...messages, msg]); })
 
     const updateRoomUsers = usersArr => {

@@ -27,10 +27,6 @@
   margin-right: 0.24em;
   height: 1em;
   width: 1em;
-  border-radius: 50%;
-}
-.connected {
-  background: var(--clr-green);
 }
 .disconnected {
   background: var(--clr-red);

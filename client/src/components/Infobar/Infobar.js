@@ -3,15 +3,25 @@ import React from 'react';
 import './Infobar.css';
 
 import closeIcon from '../../icons/closeIcon.png';
-// import onlineIcon from '../../icons/onlineIcon.png';
 
-
+const StatusCircle = (status) => {
+  return (
+    <svg
+      viewBox="0 0 10 10"
+      xmlns="http://www.w3.org/2000/svg"
+      className='status-dot'
+      fill={status ? "var(--clr-green)" : "var(--clr-red)"}
+    >
+      <circle cx="5" cy="5" r="5" />
+    </svg>
+  )
+}
 const Infobar = ({ room, isConnected }) => {
 
   return (
     <header className="infoBar">
       <div className="leftInnerContainer">
-        <div className={`status-dot ${isConnected ? 'connected' : 'disconnected'}`}></div>
+        <StatusCircle status={isConnected} />
         <h3>Game Room: {room}</h3>
       </div>
       <div className="rightInnerContainer">

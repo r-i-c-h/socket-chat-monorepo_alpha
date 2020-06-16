@@ -3,6 +3,8 @@ const addUser = ({ id, name, room }) => {
   const roomID = room.trim().toLowerCase().replace(' ', '');
   const canonicalName = name.trim().toLowerCase().replace(' ', '');
   const isHost = getUsersInRoom(roomID).length === 0;
+  if (!roomID || !canonicalName) return { error: 'Username + Room are BOTH required.' };
+
   const user = { id, roomID, name, room, isHost, canonicalName, score: 0 }
 
   if (usersStore.find(existing => existing.roomID === roomID && existing.canonicalName === user.canonicalName)) {
