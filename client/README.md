@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# BUGFIXes TODO:
+* Clients aren't all receiving room-user-list updates! atm the newest/just-joined client doesn't rec or react to the server message
+*
 
 ## Available Scripts
 
