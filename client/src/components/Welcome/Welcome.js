@@ -11,8 +11,8 @@ const Welcome = () => {
   const handleRoomChange = e => { setRoom(e.target.value); }
 
   return (
-    <div className="welcomeOuterContainer">
-      <div className="welcomeInnerContainer">
+    <div className="welcome-container">
+      <div className="welcome-container-interior">
         <h1 className="heading">Welcome </h1>
         <form>
           <label htmlFor="name">Name:
@@ -25,7 +25,7 @@ const Welcome = () => {
             onClick={(e) => (!name || !room) ? e.preventDefault() : null}
             to={`/chat?name=${name}&room=${room}`}
           >
-            <button className="button mt-20" type="submit">Log In</button>
+            <button className="button" type="submit">Log In</button>
           </Link>
         </form>
       </div>

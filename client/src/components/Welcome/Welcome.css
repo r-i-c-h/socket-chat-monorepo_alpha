@@ -1,4 +1,4 @@
-.welcomeOuterContainer {
+.welcome-container {
   color: #fff;
   background-color: var(--clr-blackish);
   text-align: center;
@@ -9,8 +9,9 @@
   align-items: center;
 }
 
-.welcomeInnerContainer {
+.welcome-container-interior {
   width: 90%;
+  max-width: 400px;
   height: 80vh;
   color: var(--clr-whiteish);
   display: flex;
@@ -24,18 +25,29 @@
   font-size: 2.5em;
 }
 
-.welcomeInput {
-  border-radius: 0;
-  padding: 15px 20px;
+.welcome-container-interior label {
+  display: block;
   width: 100%;
+  margin: 1rem auto;
+  font-size: 1.2em;
+}
+
+.welcomeInput {
+  font-size: inherit;
+  border-radius: 5px;
+  padding: 5px;
+  width: 100%;
+  margin: 0.5rem 0;
 }
 
 .button {
-  color: inherit;
   text-transform: uppercase;
+  font-size: 1.4em;
+  font-weight: bold;
   text-decoration: none;
-  background: #2979ff;
-  padding: 20px;
+  background: var(--clr-green);
+  margin: 1em auto;
+  padding: 1em;
   border-radius: 5px;
   display: inline-block;
   border: none;

@@ -1,6 +1,17 @@
 .chat-room-users {
-  background: white;
-  font-size: 50%;
-  color: orange;
-  float: left;
+  width: 100%;
+  color: var(--clr-yellow);
+  background: var(--clr-base-100);
+  padding: 0 0.5rem 0.1rem 0.5rem;
+}
+.chat-room-users h4 {
+  text-align: left;
+  margin: 0.3em 0;
+}
+.chat-room-users-list {
+  columns: 2;
+}
+.chat-room-users li {
+  padding: 0.1em;
+  font-size: 80%;
 }

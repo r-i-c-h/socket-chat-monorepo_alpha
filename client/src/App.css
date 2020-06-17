@@ -36,12 +36,15 @@ h1, h2, h3, h4, h5, h6 { text-align: center; margin: 0.4em; }
   width: 100vw;
   color: black;
   background-color: var(--clr-blackish);
+  overflow: hidden;
 }
 
 main {
+  padding: 0.48rem;
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
 }

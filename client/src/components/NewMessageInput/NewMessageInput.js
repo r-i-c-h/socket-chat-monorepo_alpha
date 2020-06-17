@@ -17,7 +17,7 @@ const NewMessageInput = () => {
   }
 
   return (
-    <div className="chat-form-container">
+    <div className="chat-input-container">
       <form className="chat-input-form">
         <input
           ref={inputRef}

@@ -1,17 +1,21 @@
 .chat-message {
+  display: block;
   background-color: var(--clr-green);
   border: 1px solid black;
   border-radius: 10px;
-  padding: 0.1em 0.5em;
-  margin: 0.2em 0.1em;
+  padding: 0.1em 0.4em;
+  margin: 0.1em;
   width: fit-content;
 }
 
 .self-chat {
   background-color: var(--clr-blue-200);
-  align-self: flex-end;
   text-align: right;
   font-style: italic;
+  /* OLD SKOOL MOVE TO RIGHT: */
+  display: block;
+  float: right;
+  clear: both;
 }
 .self-chat .chat-meta {
   color: var(--clr-base-200);

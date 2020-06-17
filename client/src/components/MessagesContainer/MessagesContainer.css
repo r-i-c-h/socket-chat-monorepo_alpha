@@ -1,8 +1,7 @@
 .chat-messages-scroll-box {
-  flex: auto; /* essentially the height */
+  padding: 1%;
   overflow: auto;
-  /* padding: 0.2rem 0.1rem; */
-  width: 100%;
+  flex: auto;
 }
 
 .scroll-to-bottom-button {

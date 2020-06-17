@@ -6,8 +6,8 @@ const addUser = ({ id, name, room }) => {
   if (!roomID || !canonicalName) return { error: 'Username + Room are BOTH required.' };
 
   const user = { id, roomID, name, room, isHost, canonicalName, score: 0 }
-
-  if (usersStore.find(existing => existing.roomID === roomID && existing.canonicalName === user.canonicalName)) {
+  const isNameTaken = usersStore.find(existing => existing.roomID === roomID && existing.canonicalName === user.canonicalName);
+  if (isNameTaken) {
     return { error: `A User with the name ${user.name} already exists in room ${user.room}`, user: null };
   }
 

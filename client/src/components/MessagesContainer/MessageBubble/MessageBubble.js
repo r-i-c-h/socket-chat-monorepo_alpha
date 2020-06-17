@@ -20,14 +20,14 @@ const MessageBubble = ({ msg: { user, text, time }, isFromSelf }) => {
   }
 
   return (
-    <li
+    <div
       className={`chat-message ${appendedClass}`}
     >
       <div className="chat-meta">
         {makeChatAuthorLine(user, isFromSelf)}
       </div>
       <p className="chat-text">{(text)}</p>
-    </li>
+    </div>
   )
 }
 

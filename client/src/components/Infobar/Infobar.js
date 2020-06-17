@@ -2,7 +2,17 @@ import React from 'react';
 
 import './Infobar.css';
 
-import closeIcon from '../../icons/closeIcon.png';
+const CloseIcon = () => (
+  <svg
+    className="close-icon"
+    viewBox="0 0 10 10"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="black"
+    stroke-width="4px"
+  >
+    <path d="M0 0 L10 10 M0 10 L10 0 Z" />
+  </svg>
+)
 
 const StatusCircle = (status) => {
   return (
@@ -26,7 +36,8 @@ const Infobar = ({ room, isConnected }) => {
       </div>
       <div className="rightInnerContainer">
         <a href="/">
-          <img src={closeIcon} alt="close chat" />
+          {/* <img src={closeIcon} alt="close chat" /> */}
+          <CloseIcon />
         </a>
       </div>
     </header>

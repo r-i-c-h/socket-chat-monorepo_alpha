@@ -57,13 +57,9 @@ io.on('connection', (socket) => {
     console.log(`${socket.id} DISCONNECTED FROM SERVER`);
     const removedUser = removeUser(socket.id);
     console.log('removedUser:', removedUser);
+    socket.broadcast.to(removedUser.roomID).emit('newChatMsg', formatChatMsg('System', `${removedUser.name} has left ${removedUser.room}`))
+    socket.broadcast.to(removedUser.roomID).emit('roomData', { room: removedUser.room, users: getUsersInRoom(removedUser.roomID) });
     socket.leave(removedUser.roomID);
-    socket.broadcast
-      .to(removedUser.roomID)
-      .emit('newAdminChatMsg', formatChatMsg('System', `${removedUser.name} has left ${removedUser.room}`))
-    socket.broadcast
-      .to(removedUser.roomID)
-      .emit('roomData', { room: removedUser.room, users: getUsersInRoom(removedUser.roomID) });
   });
 })
 
