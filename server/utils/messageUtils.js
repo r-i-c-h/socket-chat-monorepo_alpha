@@ -1,6 +1,6 @@
 function getTimeStr() {
   const currTime = new Date();
-  const timeStr = currTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+  const timeStr = currTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) // No seconds & am\pm
   // const timeStr = currTime.toLocaleString('en-US'); // <~~ Adds Date before time
   return timeStr.toLowerCase();
 }

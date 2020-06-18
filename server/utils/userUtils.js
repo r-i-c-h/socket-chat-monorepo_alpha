@@ -19,15 +19,17 @@ const removeUser = (id) => {
   const indx = usersStore.findIndex(eachUser => eachUser.id === id);
   if (indx !== -1) {
     return usersStore.splice(indx, 1); //! (returns the found user object) -> MUTATES usersStore!!!
-  } else {
-    return { error: `No User with ID ${id} found in userStore` }
   }
+
+  return { error: `No User with ID ${id} found in userStore` }
 }
 
 const getUser = (id) => usersStore.find(user => user.id === id);
 
 const getUsersInRoom = (roomID) => usersStore.filter(user => user.roomID === roomID);
 
-const getWholeUsersStore = () => usersStore.slice();
+const getUserNamesInRoom = (roomID) => getUsersInRoom(roomID).map(eachUser => eachUser.name);
 
-module.exports = { addUser, removeUser, getUser, getUsersInRoom, getWholeUsersStore };
+// const getWholeUsersStore = () => usersStore.slice();
+
+module.exports = { addUser, removeUser, getUser, getUsersInRoom, getUserNamesInRoom };

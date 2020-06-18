@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import './Welcome.css';
 
 const Welcome = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
-
   const handleNameChange = e => { setName(e.target.value); }
   const handleRoomChange = e => { setRoom(e.target.value); }
 

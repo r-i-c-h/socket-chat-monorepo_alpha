@@ -3,16 +3,16 @@ import queryString from 'query-string';
 import { socket } from '../../utils/SocketConnection';
 import './Chat.css';
 
-import Infobar from '../Infobar/Infobar';
-import MessagesContainer from '../MessagesContainer/MessagesContainer';
-import NewMessageInput from '../NewMessageInput/NewMessageInput';
 import RoomUsersDiv from '../RoomUsersDiv/RoomUsersDiv';
+import MessagesContainer from '../MessagesContainer/MessagesContainer';
+import Infobar from '../Infobar/Infobar';
+import NewMessageInput from '../NewMessageInput/NewMessageInput';
 
 const Chat = ({ location }) => { // location is from react-router-dom
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const [messages, setMessages] = useState([]);
-  const [users, setUsers] = useState(['I think we\'re alone?']);
+  const [users, setUsers] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => { // init()
@@ -22,51 +22,45 @@ const Chat = ({ location }) => { // location is from react-router-dom
 
     // Defined args are data passed to server
     // the defined callback func() is executed by the server
-    socket.emit('join', { name, room }, ({ error, user }) => {
+    socket.emit('join', { name, room }, (error) => {
       if (error) {
         alert('ERROR: ' + error);
         setRoom('ERROR');
+        setIsConnected(false);
       } else {
-        if (user) { setIsConnected(true); }
-        console.log('Joined with ' + user);
+        console.log('Setting Connected');
+        setIsConnected(true);
       }
+      console.log('End JOIN Emit');
     });
+
+    return () => socket.disconnect();
 
     // return () => { // Cleanup function necessary?
     //   socket.emit('disconnect');
-    //   socket.disconnect();
     //   setIsConnected(false);
     // }
   }, [location.search]);
 
   useEffect(() => { // INBOUND MESSAGE HANDLING
-    const addNewChatMsg = newMsg => setMessages([...messages, newMsg]);
-    socket.on('newChatMsg', (msg) => { addNewChatMsg(msg); socket.off(); })
+    const addNewChatMsg = newMsg => setMessages(messages => [...messages, newMsg]);
+    socket.on('newChatMsg', (msg) => {
+      console.log('NEW CHAT: ', msg.text);
+      addNewChatMsg(msg);
+    })
 
-    const updateRoomUserList = usersArr => {
-      const namesArr = usersArr.map(user => user.name)
-      const otherUsersNames = namesArr.filter(userName => userName !== name);
-      if (otherUsersNames.length === 0) {
-        setUsers(['You Are Alone']);
-      } else {
-        setUsers(otherUsersNames);
-      }
-    }
     socket.on('roomData', ({ room, users, time }) => {
-      console.log(`A: Rec roomData Update (${room} version) at ${Date.now()}`);
-      console.log(users);
-      updateRoomUserList(users);
-      socket.off();
+      console.log(`NEW ROOM DATA: (${room} ver) at ${Date.now()}`);
+      console.log('setUsers: ', users);
+      setUsers(users);
     });
-
-
-  });
+  }, []);
 
   return (
     <main>
       <section className="chats-container">
         <Infobar room={room} isConnected={isConnected} />
-        <RoomUsersDiv userNames={users} />
+        <RoomUsersDiv users={users} name={name} />
         <div className="chat-main-container">
           <MessagesContainer messages={messages} name={name} />
           <NewMessageInput />

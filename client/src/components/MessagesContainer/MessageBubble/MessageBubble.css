@@ -6,17 +6,18 @@
   padding: 0.1em 0.4em;
   margin: 0.1em;
   width: fit-content;
+  clear: both; /* OLD SKOOL MOVE TO RIGHT: */
+  max-width: 90%;
 }
 
 .self-chat {
   background-color: var(--clr-blue-200);
   text-align: right;
-  font-style: italic;
-  /* OLD SKOOL MOVE TO RIGHT: */
+  font-style: oblique;
   display: block;
-  float: right;
-  clear: both;
+  float: right; /* OLD SKOOL MOVE TO RIGHT: */
 }
+
 .self-chat .chat-meta {
   color: var(--clr-base-200);
 }

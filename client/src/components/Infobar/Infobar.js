@@ -8,7 +8,7 @@ const CloseIcon = () => (
     viewBox="0 0 10 10"
     xmlns="http://www.w3.org/2000/svg"
     stroke="black"
-    stroke-width="4px"
+    strokeWidth="4px"
   >
     <path d="M0 0 L10 10 M0 10 L10 0 Z" />
   </svg>
@@ -27,7 +27,6 @@ const StatusCircle = (status) => {
   )
 }
 const Infobar = ({ room, isConnected }) => {
-
   return (
     <header className="infoBar">
       <div className="leftInnerContainer">
@@ -36,7 +35,6 @@ const Infobar = ({ room, isConnected }) => {
       </div>
       <div className="rightInnerContainer">
         <a href="/">
-          {/* <img src={closeIcon} alt="close chat" /> */}
           <CloseIcon />
         </a>
       </div>

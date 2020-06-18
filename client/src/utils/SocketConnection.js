@@ -6,4 +6,4 @@ const SOCKETPORT = `${SERVER}:${PORT}`;
 
 const socket = io(SOCKETPORT);
 
-export { socket, SOCKETPORT };
+export { socket };

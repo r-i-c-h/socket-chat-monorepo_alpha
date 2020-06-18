@@ -1,7 +1,7 @@
 .chats-container {
   background: var(--clr-base);
   width: 50%;
-  height: 60vh;
+  height: 20rem;
   max-width: 400px;
   display: flex;
   flex-direction: column;
