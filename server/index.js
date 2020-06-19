@@ -6,7 +6,7 @@ const cors = require('cors');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/userUtils.js');
 const { formatChatMsg, formatRoomData } = require('./utils/messageUtils');
 
-const router = require('./utils/router');
+const router = require('./routes/router');
 
 const app = express();
 const server = http.createServer(app);
@@ -17,7 +17,7 @@ app.use(router);
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 //*** IO ACTIONS ***//
 io.on('connection', (socket) => {
-  console.log(`NEW CONNECTION TO SERVER: ${socket.id} at ${Date.now()}`);
+  console.log(`NEW CONNECTION from ${socket.id} at ${Date.now()}`);
 
   socket.on('join', ({ name, room }, cb) => {
     const { error, user } = addUser({ id: socket.id, name, room });
@@ -29,18 +29,19 @@ io.on('connection', (socket) => {
 
     socket.emit('newChatMsg', formatChatMsg('System', `${user.name} welcome to ${user.room}`));
     socket.broadcast.to(user.roomID).emit('newChatMsg', formatChatMsg('System', `${user.name} has joined ${user.room}`));
-    io.to(user.roomID).emit('roomData', { room: user.room, users: getUsersInRoom(user.roomID) });
+    io.to(user.roomID).emit('roomData', formatRoomData(`New User in ${user.room}`, getUsersInRoom(user.roomID)));
 
-    console.log(`Added ${socket.id} as ${name} to room ${user.roomID}`);
+    console.log(`Added [${socket.id}] as "${name}" to room "${user.roomID}"`);
     if (cb) { cb(); }
   });
 
-  socket.on('reqRoomUpdate', () => {
+  socket.on('reqRoomUpdate', (cb) => {
     const user = getUser(socket.id);
     if (user) {
       const roomData = formatRoomData(user.room, getUsersInRoom(user.roomID))
       io.to(user.roomID).emit('roomData', roomData);
     }
+    if (cb) { cb(); }
   });
 
   socket.on('newChatMsg', (msg, cb) => { // relay chat msgs (w/server timestamp)
@@ -49,20 +50,18 @@ io.on('connection', (socket) => {
       const newChatMsg = formatChatMsg(user.name, msg.text);
       io.to(user.roomID).emit('newChatMsg', newChatMsg);
     }
-
     if (cb) { cb(); }
   });
 
   socket.on('disconnect', () => {
-    const removedUser = removeUser(socket.id);
-    console.log(`${socket.id} DISCONNECTED FROM SERVER`);
-    console.log('removedUser:', removedUser);
-
-    io.to(removedUser.roomID).emit('newChatMsg', formatChatMsg('System', `${removedUser.name} has left ${removedUser.room}`));
-    io.to(removedUser.roomID).emit('roomData', formatRoomData('User left', getUsersInRoom(removedUser.roomID)));
-    console.log(socket.rooms);
-    socket.leave(removedUser.roomID);
-
+    const oneUserArray = removeUser(socket.id);
+    const removedUser = oneUserArray[0];
+    if (removedUser) {
+      io.to(removedUser.roomID).emit('newChatMsg', formatChatMsg('System', `${removedUser.name} has left ${removedUser.room}`));
+      io.to(removedUser.roomID).emit('roomData', formatRoomData('User left', getUsersInRoom(removedUser.roomID)));
+      socket.leave(removedUser.roomID);
+    }
+    console.log(`${socket.id} DISCONNECTED from server`);
   });
 })
 
