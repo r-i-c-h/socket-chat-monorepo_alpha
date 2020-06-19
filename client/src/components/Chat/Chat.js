@@ -1,72 +1,98 @@
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { socket } from '../../utils/SocketConnection';
-import './Chat.css';
+import io from "socket.io-client";
 
 import RoomUsersDiv from '../RoomUsersDiv/RoomUsersDiv';
 import MessagesContainer from '../MessagesContainer/MessagesContainer';
 import Infobar from '../Infobar/Infobar';
 import NewMessageInput from '../NewMessageInput/NewMessageInput';
 
-const Chat = ({ location }) => { // location is from react-router-dom
-  const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [isConnected, setIsConnected] = useState(false);
+import './Chat.css';
 
+const ENDPOINT = process.env.SOCKETPORT || "http://localhost:5000";
+
+const Chat = ({ location, history }) => { // location is from react-router-dom
+  const [socket, setSocket] = useState(null); // store the socket here
+  const [socketID, setSocketID] = useState(null); // not really using it but would be better for name comparisons
+  const [isConnected, setIsConnected] = useState(false); // for status dot
+  const [isLoading, setIsLoading] = useState(true); // to slack on the screen display
+  const [name, setName] = useState(''); // registration info
+  const [room, setRoom] = useState(''); // registration info
+  const [messages, setMessages] = useState([]); // !   <~~ Chat Messages Store
+  const [users, setUsers] = useState([]); // ! <~~ Arr of User{}s in our room
+
+  const addNewChatMsg = newMsg => setMessages(messages => [...messages, newMsg]);
+
+  // Establish Connection
   useEffect(() => { // init()
-    const { name, room } = queryString.parse(location.search);
-    setName(name);
-    setRoom(room);
+    setSocket(io(ENDPOINT));
+  }, []);
 
-    // Defined args are data passed to server
-    // the defined callback func() is executed by the server
-    socket.emit('join', { name, room }, (error) => {
-      if (error) {
-        alert('ERROR: ' + error);
-        setRoom('ERROR');
-        setIsConnected(false);
-      } else {
-        console.log('Setting Connected');
-        setIsConnected(true);
-      }
-      console.log('End JOIN Emit');
+  // Read URL Parameters
+  useEffect(() => {
+    // const { name, room } = queryString.parse(location.search);
+    setName(queryString.parse(location.search).name);
+    setRoom(queryString.parse(location.search).room);
+  }, [location]);
+
+  // Socket Events:
+  useEffect(() => {
+    if (!socket) return;
+    socket.on('connect', () => {
+      setSocketID(socket.id);
+      setIsConnected(socket.connected);
+      console.log(`~~~Connected with ID ${socket.id}. status:${socket.connected}`);
+
+      // Defined args are data passed to server
+      // the defined callback func() is executed by the server
+      socket.emit('join', { name, room }, (error) => {
+        if (error) {
+          alert('ERROR: ' + error);
+          // setRoom(null);
+          // setIsConnected(false);
+          history.push('/');
+        } else {
+          console.log('Joined Server');
+          setIsConnected(true);
+          setIsLoading(false);
+        }
+      });
     });
 
-    return () => socket.disconnect();
-
-    // return () => { // Cleanup function necessary?
-    //   socket.emit('disconnect');
-    //   setIsConnected(false);
-    // }
-  }, [location.search]);
-
-  useEffect(() => { // INBOUND MESSAGE HANDLING
-    const addNewChatMsg = newMsg => setMessages(messages => [...messages, newMsg]);
-    socket.on('newChatMsg', (msg) => {
-      console.log('NEW CHAT: ', msg.text);
-      addNewChatMsg(msg);
-    })
+    socket.on('newChatMsg', (msg) => { addNewChatMsg(msg); });
 
     socket.on('roomData', ({ room, users, time }) => {
-      console.log(`NEW ROOM DATA: (${room} ver) at ${Date.now()}`);
+      console.log(`NEW ROOM DATA: (${room}) at ${Date.now()}`);
       console.log('setUsers: ', users);
       setUsers(users);
     });
-  }, []);
+
+    socket.on('disconnect', () => {
+      setIsConnected(socket.connected); // which _should_ be false...
+      console.log('~~~Disconnected!~~~');
+    });
+
+    return () => { // CLEANUP Function
+      setIsConnected(false);
+      socket && socket.emit('disconnect');
+      socket && socket.removeAllListeners();
+      socket && socket.close(); // .disconnect() is the literally the same thing as .close()
+    }
+  }, [socket]); // eslint-disable-line
+  // Disable eslint above to stop warnings about room|name dependencies
 
   return (
-    <main>
-      <section className="chats-container">
-        <Infobar room={room} isConnected={isConnected} />
-        <RoomUsersDiv users={users} name={name} />
-        <div className="chat-main-container">
-          <MessagesContainer messages={messages} name={name} />
-          <NewMessageInput />
-        </div>
-      </section>
-    </main>
+    isLoading ? <div><h1>Loading...</h1></div>
+      : (<main>
+        <section className="chats-container">
+          <Infobar room={room} isConnected={isConnected} />
+          <RoomUsersDiv users={users} socketID={socketID} name={name} />
+          <div className="chat-main-container">
+            <MessagesContainer messages={messages} name={name} />
+            <NewMessageInput socket={socket} />
+          </div>
+        </section>
+      </main>)
   )
 }
 

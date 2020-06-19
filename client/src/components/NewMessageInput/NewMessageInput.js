@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { socket } from '../../utils/SocketConnection';
+// import { socket } from '../../utils/SocketConnection';
 
 import './NewMessageInput.css';
 
-const NewMessageInput = () => {
+const NewMessageInput = ({ socket }) => {
   const [outgoingMsg, setOutgoingMsg] = useState('');
   const inputRef = useRef(null); // for focusing the text box after sending a chat
 
