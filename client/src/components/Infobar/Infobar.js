@@ -14,13 +14,13 @@ const CloseIcon = () => (
   </svg>
 )
 
-const StatusCircle = (isConnected) => {
+const StatusCircle = ({ isConnected }) => {
   return (
     <svg
       viewBox="0 0 10 10"
       xmlns="http://www.w3.org/2000/svg"
       className='status-dot'
-      fill={isConnected === true ? "var(--clr-green)" : "var(--clr-red)"}
+      fill={isConnected ? "var(--clr-green)" : "var(--clr-red)"}
     >
       <circle cx="5" cy="5" r="5" />
     </svg>
