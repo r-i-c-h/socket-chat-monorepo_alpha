@@ -9,7 +9,7 @@ import NewMessageInput from '../NewMessageInput/NewMessageInput';
 
 import './Chat.css';
 
-const ENDPOINT = process.env.SOCKETPORT || "http://localhost:5000";
+const ENDPOINT = process.env.BACKEND || "http://localhost:5000";
 
 const Chat = ({ location, history }) => { // location is from react-router-dom
   const [socket, setSocket] = useState(null); // store the socket here

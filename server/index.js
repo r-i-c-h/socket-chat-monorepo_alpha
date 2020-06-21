@@ -3,10 +3,12 @@ const http = require('http')
 const socketio = require('socket.io');
 const cors = require('cors');
 
+const PORT = process.env.PORT || 5000;
+const router = require('./routes/router');
+
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/userUtils.js');
 const { formatChatMsg, formatRoomData } = require('./utils/messageUtils');
 
-const router = require('./routes/router');
 
 const app = express();
 const server = http.createServer(app);
@@ -17,12 +19,12 @@ app.use(router);
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 //*** IO ACTIONS ***//
 io.on('connection', (socket) => {
-  console.log(`NEW CONNECTION from ${socket.id} at ${Date.now()}`);
+  // console.log(`NEW CONNECTION from ${socket.id} at ${Date.now()}`);
 
   socket.on('join', ({ name, room }, cb) => {
     const { error, user } = addUser({ id: socket.id, name, room });
     if (error) {
-      console.error('Something went wrong: ', error);
+      // console.error('Something went wrong: ', error);
       return cb(error);
     }
     socket.join(user.roomID);
@@ -31,7 +33,7 @@ io.on('connection', (socket) => {
     socket.broadcast.to(user.roomID).emit('newChatMsg', formatChatMsg('System', `${user.name} has joined ${user.room}`));
     io.to(user.roomID).emit('roomData', formatRoomData(`New User in ${user.room}`, getUsersInRoom(user.roomID)));
 
-    console.log(`Added [${socket.id}] as "${name}" to room "${user.roomID}"`);
+    // console.log(`Added [${socket.id}] as "${name}" to room "${user.roomID}"`);
     if (cb) { cb(); }
   });
 
@@ -61,10 +63,10 @@ io.on('connection', (socket) => {
       io.to(removedUser.roomID).emit('roomData', formatRoomData('User left', getUsersInRoom(removedUser.roomID)));
       socket.leave(removedUser.roomID);
     }
-    console.log(`${socket.id} DISCONNECTED from server`);
+    // console.log(`${socket.id} DISCONNECTED from server`);
   });
 })
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-const PORT = process.env.PORT || 5000;
+
 server.listen(PORT, () => console.log(`~~~~~~~~~~~~~~~~\n Server up and listening at port:${PORT}`));
