@@ -16,7 +16,7 @@ dist/
 .cache/
 # Cache File
 .cache
-public/
+
 # IF using NEXT/NUXT (instead of Gatsby): comment out `public/`
 # (see https://nextjs.org/blog/next-9-1#public-directory-support)
 # Next.js build output - check to comment out `public/`

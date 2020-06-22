@@ -15,11 +15,18 @@ No Bugs to report at the moment...
 
 ## Dev Notes
 
-### Deployment Strategy:
+To monitor socket-io server, maybe install https://github.com/drewblaisdell/monitor.io
 
-Run react client-build manually via 'cd client && npm run build';
+## Deployment:
 
-If need help monitoring socket-io server, maybe install https://github.com/drewblaisdell/monitor.io
+### Client
+
+To be hosted on netlify.
+Add root dir netlify.toml file - specifies, new base, build, and serve directories.
+
+### SERVER
+
+tl;dr -`git subtree push --prefix server heroku-server master`
 
 ## HEROKU FUN
 
@@ -29,6 +36,8 @@ Basically you manually push via the subtree command.
 
 0. Make a `Procfile` build-file in the server directory with the build command: `web: node index.js`
 1. Create both apps on Heroku:
+
+// heroku create heroku-socketchat-server-alpha --remote heroku-server
 
 - `heroku apps:create my-new-backend`
 
